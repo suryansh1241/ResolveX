@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResolveX — AI Customer Support Agent (RAG + MCP)</title>
+  <meta name="description" content="Enterprise Customer Support Agent featuring Retrieval-Augmented Generation (RAG) and Model Context Protocol (MCP) integration.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <h1 class="brand-title">ResolveX</h1>
+          <div class="brand-subtitle">AI Support Agent • RAG + MCP Protocol</div>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="tab-chat" id="nav-chat-btn">
+          💬 Live Support Chat
+        </button>
+        <button class="tab-btn" data-tab="tab-mcp" id="nav-mcp-btn">
+          ⚡ MCP Inspector <span class="tab-badge" id="mcp-tool-count">6 Tools</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-rag" id="nav-rag-btn">
+          🔍 RAG Workbench
+        </button>
+        <button class="tab-btn" data-tab="tab-dash" id="nav-dash-btn">
+          📊 Operations & Tickets
+        </button>
+      </nav>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        <span id="status-text">MCP Protocol Active • JSON-RPC 2.0</span>
+      </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main class="main-content">
+
+      <!-- VIEW 1: LIVE SUPPORT CHAT -->
+      <section id="tab-chat" class="view-panel active">
+        <div class="chat-container">
+          
+          <!-- Chat Interface -->
+          <div class="chat-main">
+            <div class="chat-header">
+              <div class="agent-profile">
+                <div class="agent-avatar">🤖</div>
+                <div class="agent-info">
+                  <h3>ResolveX Autonomous Agent</h3>
+                  <p>Model Context Protocol (MCP) + RAG Knowledge Engine</p>
+                </div>
+              </div>
+
+              <!-- Customer Selector -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; color: var(--text-muted);">Active Customer:</span>
+                <select id="customer-select" style="background: var(--bg-surface-elevated); color: var(--text-main); border: 1px solid var(--border-glass); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; outline: none;">
+                  <option value="CUST-101">Alex Rivera (Pro Member - ORD-8921)</option>
+                  <option value="CUST-102">Sophia Chen (Standard - ORD-4412)</option>
+                  <option value="CUST-103">Marcus Vance (Enterprise - ORD-3309)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Chat Messages Window -->
+            <div class="chat-messages" id="chat-messages-box">
+              <!-- Initial Welcome Message -->
+              <div class="message-group assistant">
+                <div class="message-bubble">
+                  Hello <strong>Alex Rivera</strong>! 👋 I am <strong>ResolveX</strong>, your AI Customer Support Assistant.
+                  <br><br>
+                  I am connected to our live <strong>MCP Tools Engine</strong> and <strong>RAG Knowledge Base</strong>. How can I assist you today?
+                </div>
+                <div class="message-meta">
+                  <span>System Bot</span> • <span>Just now</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suggested Quick Prompts -->
+            <div class="suggested-chips">
+              <button class="chip-btn" onclick="sendQuickPrompt('Where is my order ORD-8921?')">📦 Track Order ORD-8921</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Can I get a refund for order ORD-8921?')">💸 Request Refund for ORD-8921</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Check product warranty for serial WN-99812')">🛡️ Check Warranty (WN-99812)</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('How do I factory reset my Smart Hub device?')">⚙️ Device Reset Guide (RAG)</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('I need to escalate this issue to a human agent')">🚨 Escalate Support Ticket</button>
+            </div>
+
+            <!-- Chat Input Form -->
+            <div class="chat-input-area">
+              <input type="text" id="chat-input-field" class="chat-input" placeholder="Ask about orders, refunds, warranties, shipping, or troubleshooting..." autocomplete="off">
+              <button id="chat-send-btn" class="send-btn" title="Send Message">➤</button>
+            </div>
+          </div>
+
+          <!-- Sidebar Info Panel -->
+          <aside class="chat-sidebar">
+            <!-- Active Customer Details Card -->
+            <div class="sidebar-card">
+              <div class="sidebar-title">👤 Customer Profile</div>
+              <div id="cust-profile-box" style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
+                <div><strong>Name:</strong> <span id="prof-name">Alex Rivera</span></div>
+                <div><strong>Tier:</strong> <span id="prof-tier" style="color: var(--text-cyan);">Pro Member</span></div>
+                <div><strong>Email:</strong> <span id="prof-email">alex.rivera@example.com</span></div>
+                <div><strong>Active Order:</strong> <span id="prof-order" style="color: #60a5fa;">ORD-8921</span></div>
+              </div>
+            </div>
+
+            <!-- Live RAG Citations Feed -->
+            <div class="sidebar-card" style="flex: 1; overflow-y: auto;">
+              <div class="sidebar-title">📚 Retained RAG Context</div>
+              <div id="sidebar-citations-box" style="font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
+                <p>Knowledge Base references used in response will appear here automatically.</p>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- VIEW 2: MCP PROTOCOL INSPECTOR -->
+      <section id="tab-mcp" class="view-panel">
+        <div class="mcp-layout">
+          
+          <!-- Left Panel: Registered Tools -->
+          <div class="mcp-tools-list">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h3 style="font-family: var(--font-heading); font-size: 16px;">MCP Tools Registry</h3>
+              <span style="font-size: 11px; background: rgba(99, 102, 241, 0.2); color: var(--text-accent); padding: 4px 8px; border-radius: var(--radius-full);">JSON-RPC 2.0</span>
+            </div>
+            <div id="mcp-tools-container" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Dynamic tool cards injected here -->
+            </div>
+          </div>
+
+          <!-- Right Panel: Live Terminal Protocol Log -->
+          <div class="mcp-terminal-container">
+            <div class="terminal-header">
+              <div class="terminal-title">
+                <span>⚡ MCP Protocol Terminal</span> • <span style="color: #10b981;">Live Stream</span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button id="clear-mcp-logs-btn" style="background: rgba(255, 255, 255, 0.1); border: none; color: #fff; padding: 4px 10px; border-radius: var(--radius-sm); font-size: 11px; cursor: pointer;">Clear Logs</button>
+              </div>
+            </div>
+            <div class="terminal-body" id="mcp-terminal-logs">
+              <div class="log-entry">
+                <span class="log-time">[System Init]</span> MCP Server initialized protocol handshake handler on standard stream.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW 3: RAG VECTOR SEARCH WORKBENCH -->
+      <section id="tab-rag" class="view-panel">
+        <div class="rag-layout">
+          <div class="rag-search-box">
+            <h2 style="font-family: var(--font-heading); font-size: 20px;">RAG Knowledge Base Search Tester</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">Test the hybrid BM25 + Cosine similarity vector search engine directly against the indexed document passages.</p>
+
+            <div class="rag-input-group">
+              <input type="text" id="rag-query-input" class="chat-input" placeholder="e.g., 30-day return policy restocking fee, or Bluetooth pairing steps" value="return policy 30 days refund">
+              <button id="rag-search-btn" class="send-btn" style="width: auto; padding: 0 24px;">Search RAG</button>
+            </div>
+          </div>
+
+          <!-- Search Results Grid -->
+          <div style="font-family: var(--font-heading); font-size: 16px; margin-top: 10px;">Top Matched Passages</div>
+          <div class="rag-results-grid" id="rag-results-container">
+            <!-- Dynamic passage cards injected here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: OPERATIONS DASHBOARD & TICKETS -->
+      <section id="tab-dash" class="view-panel">
+        
+        <!-- Metrics Bar -->
+        <div class="dashboard-metrics">
+          <div class="metric-card">
+            <div class="metric-icon">💬</div>
+            <div>
+              <div class="metric-val" id="metric-queries">14</div>
+              <div class="metric-label">Support Inquiries</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <div>
+              <div class="metric-val" id="metric-mcp-calls">8</div>
+              <div class="metric-label">MCP Tool Executions</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🎯</div>
+            <div>
+              <div class="metric-val">98.4%</div>
+              <div class="metric-label">RAG Accuracy Score</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🎫</div>
+            <div>
+              <div class="metric-val" id="metric-tickets">2</div>
+              <div class="metric-label">Active Support Tickets</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="data-table-container" style="margin-bottom: 24px;">
+          <h3 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 14px; color: var(--text-cyan);">Customer Orders Database</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Carrier</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Orders injected here -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="data-table-container">
+          <h3 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 14px; color: #fbbf24;">Active Support Tickets Queue</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Customer</th>
+                <th>Subject</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tickets-table-body">
+              <!-- Tickets injected here -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data/kb_data.js"></script>
+  <script src="js/data/mock_db.js"></script>
+  <script src="js/rag/engine.js"></script>
+  <script src="js/mcp/server.js"></script>
+  <script src="js/mcp/client.js"></script>
+  <script src="js/agent/core.js"></script>
+  <script src="js/ui/app.js"></script>
+</body>
+</html>
