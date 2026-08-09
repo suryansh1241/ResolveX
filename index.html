@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ResolveX — AI Customer Support Agent (RAG + MCP)</title>
-  <meta name="description" content="Enterprise Customer Support Agent featuring Retrieval-Augmented Generation (RAG) and Model Context Protocol (MCP) integration.">
+  <title>ResolveX — Enterprise AI Customer Support Agent (RAG + MCP)</title>
+  <meta name="description" content="Enterprise Customer Support Agent featuring Reciprocal Rank Fusion (RRF) RAG and Model Context Protocol (MCP) v2 integration.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <h1 class="brand-title">ResolveX</h1>
-          <div class="brand-subtitle">AI Support Agent • RAG + MCP Protocol</div>
+          <div class="brand-subtitle">AI Support Agent • RAG + MCP v2 Protocol</div>
         </div>
       </div>
 
@@ -25,7 +25,7 @@
           💬 Live Support Chat
         </button>
         <button class="tab-btn" data-tab="tab-mcp" id="nav-mcp-btn">
-          ⚡ MCP Inspector <span class="tab-badge" id="mcp-tool-count">6 Tools</span>
+          ⚡ MCP Inspector <span class="tab-badge" id="mcp-tool-count">12 Tools</span>
         </button>
         <button class="tab-btn" data-tab="tab-rag" id="nav-rag-btn">
           🔍 RAG Workbench
@@ -37,7 +37,7 @@
 
       <div class="system-status">
         <span class="status-dot"></span>
-        <span id="status-text">MCP Protocol Active • JSON-RPC 2.0</span>
+        <span id="status-text">MCP Protocol v2 Active • JSON-RPC 2.0</span>
       </div>
     </header>
 
@@ -62,10 +62,17 @@
               <!-- Customer Selector -->
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 12px; color: var(--text-muted);">Active Customer:</span>
-                <select id="customer-select" style="background: var(--bg-surface-elevated); color: var(--text-main); border: 1px solid var(--border-glass); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; outline: none;">
+                <select id="customer-select" style="background: var(--bg-surface-elevated); color: var(--text-main); border: 1px solid var(--border-glass); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; outline: none; max-width: 280px;">
                   <option value="CUST-101">Alex Rivera (Pro Member - ORD-8921)</option>
                   <option value="CUST-102">Sophia Chen (Standard - ORD-4412)</option>
                   <option value="CUST-103">Marcus Vance (Enterprise - ORD-3309)</option>
+                  <option value="CUST-104">Elena Rostova (Enterprise VIP - ORD-7711)</option>
+                  <option value="CUST-105">David Miller (Pro Member - ORD-5520)</option>
+                  <option value="CUST-106">Amara Okafor (Enterprise - ORD-9012)</option>
+                  <option value="CUST-107">Liam O'Connor (Standard - ORD-2041)</option>
+                  <option value="CUST-108">Yuki Tanaka (Pro Member - ORD-6632)</option>
+                  <option value="CUST-109">Carlos Mendez (Standard - ORD-1105)</option>
+                  <option value="CUST-110">Rachel Green (Pro Member - ORD-9988)</option>
                 </select>
               </div>
             </div>
@@ -77,7 +84,7 @@
                 <div class="message-bubble">
                   Hello <strong>Alex Rivera</strong>! 👋 I am <strong>ResolveX</strong>, your AI Customer Support Assistant.
                   <br><br>
-                  I am connected to our live <strong>MCP Tools Engine</strong> and <strong>RAG Knowledge Base</strong>. How can I assist you today?
+                  I am connected to our live <strong>MCP Tools Server (12 Tools Registered)</strong> and <strong>Hybrid RRF RAG Engine (20 Articles Indexed)</strong>. How can I assist you today?
                 </div>
                 <div class="message-meta">
                   <span>System Bot</span> • <span>Just now</span>
@@ -89,14 +96,20 @@
             <div class="suggested-chips">
               <button class="chip-btn" onclick="sendQuickPrompt('Where is my order ORD-8921?')">📦 Track Order ORD-8921</button>
               <button class="chip-btn" onclick="sendQuickPrompt('Can I get a refund for order ORD-8921?')">💸 Request Refund for ORD-8921</button>
-              <button class="chip-btn" onclick="sendQuickPrompt('Check product warranty for serial WN-99812')">🛡️ Check Warranty (WN-99812)</button>
-              <button class="chip-btn" onclick="sendQuickPrompt('How do I factory reset my Smart Hub device?')">⚙️ Device Reset Guide (RAG)</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Cancel my processing order ORD-3309')">🚫 Cancel Order ORD-3309</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Generate a new Developer API key for my account')">🔑 Developer API Key</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Check product warranty for serial WN-99812')">🛡️ Warranty (WN-99812)</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('What are express shipping rates for Japan?')">🚚 Japan Shipping Rates</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Schedule an on-site field technician visit for hardware repair')">🔧 Book Technician Visit</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('How do I factory reset my Smart Hub device?')">⚙️ Factory Reset Guide (RAG)</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Check infrastructure system health and cluster uptime')">⚡ System Health Check</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('I want to export my personal data under GDPR')">📁 GDPR Data Export</button>
               <button class="chip-btn" onclick="sendQuickPrompt('I need to escalate this issue to a human agent')">🚨 Escalate Support Ticket</button>
             </div>
 
             <!-- Chat Input Form -->
             <div class="chat-input-area">
-              <input type="text" id="chat-input-field" class="chat-input" placeholder="Ask about orders, refunds, warranties, shipping, or troubleshooting..." autocomplete="off">
+              <input type="text" id="chat-input-field" class="chat-input" placeholder="Ask about orders, refunds, API keys, technician visits, warranties, shipping, or troubleshooting..." autocomplete="off">
               <button id="chat-send-btn" class="send-btn" title="Send Message">➤</button>
             </div>
           </div>
@@ -108,6 +121,7 @@
               <div class="sidebar-title">👤 Customer Profile</div>
               <div id="cust-profile-box" style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
                 <div><strong>Name:</strong> <span id="prof-name">Alex Rivera</span></div>
+                <div><strong>ID:</strong> <span id="prof-id" style="color: var(--text-accent);">CUST-101</span></div>
                 <div><strong>Tier:</strong> <span id="prof-tier" style="color: var(--text-cyan);">Pro Member</span></div>
                 <div><strong>Email:</strong> <span id="prof-email">alex.rivera@example.com</span></div>
                 <div><strong>Active Order:</strong> <span id="prof-order" style="color: #60a5fa;">ORD-8921</span></div>
@@ -128,17 +142,72 @@
 
       <!-- VIEW 2: MCP PROTOCOL INSPECTOR -->
       <section id="tab-mcp" class="view-panel">
+        
+        <!-- MCP Inspector Sub Navigation -->
+        <div style="display: flex; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--border-glass); padding-bottom: 10px;">
+          <button class="mcp-subtab-btn active" data-mcp-target="mcp-sec-tools">🛠️ Tools Registry (12)</button>
+          <button class="mcp-subtab-btn" data-mcp-target="mcp-sec-playground">⚡ Interactive Tool Playground</button>
+          <button class="mcp-subtab-btn" data-mcp-target="mcp-sec-resources">📚 Resources (5)</button>
+          <button class="mcp-subtab-btn" data-mcp-target="mcp-sec-prompts">📝 Prompts Library (4)</button>
+        </div>
+
         <div class="mcp-layout">
           
-          <!-- Left Panel: Registered Tools -->
-          <div class="mcp-tools-list">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <h3 style="font-family: var(--font-heading); font-size: 16px;">MCP Tools Registry</h3>
-              <span style="font-size: 11px; background: rgba(99, 102, 241, 0.2); color: var(--text-accent); padding: 4px 8px; border-radius: var(--radius-full);">JSON-RPC 2.0</span>
+          <!-- Left Panel Content -->
+          <div class="mcp-tools-list" style="overflow-y: auto; max-height: calc(100vh - 180px);">
+            
+            <!-- SECTION 1: TOOLS REGISTRY -->
+            <div id="mcp-sec-tools" class="mcp-subpanel active">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <h3 style="font-family: var(--font-heading); font-size: 16px;">Registered MCP Tools Directory</h3>
+                <span style="font-size: 11px; background: rgba(99, 102, 241, 0.2); color: var(--text-accent); padding: 4px 8px; border-radius: var(--radius-full);">JSON-RPC 2.0</span>
+              </div>
+              <div id="mcp-tools-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Dynamic tool cards injected here -->
+              </div>
             </div>
-            <div id="mcp-tools-container" style="display: flex; flex-direction: column; gap: 12px;">
-              <!-- Dynamic tool cards injected here -->
+
+            <!-- SECTION 2: INTERACTIVE TOOL PLAYGROUND -->
+            <div id="mcp-sec-playground" class="mcp-subpanel" style="display: none;">
+              <h3 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 8px;">Interactive MCP Tool Tester</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Select any MCP tool, edit its JSON arguments, and execute a live JSON-RPC request against the MCP server.</p>
+
+              <div style="display: flex; flex-direction: column; gap: 12px; background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                <label style="font-size: 12px; color: var(--text-accent); font-weight: 600;">Select Target MCP Tool:</label>
+                <select id="pg-tool-select" style="background: var(--bg-surface-elevated); color: #fff; border: 1px solid var(--border-glass); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; outline: none;">
+                  <!-- Options injected dynamically -->
+                </select>
+
+                <label style="font-size: 12px; color: var(--text-accent); font-weight: 600;">JSON Arguments Input:</label>
+                <textarea id="pg-args-input" style="background: #0b0f19; color: #67e8f9; font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); height: 120px; outline: none; resize: vertical;">{}</textarea>
+
+                <button id="pg-execute-btn" class="send-btn" style="width: 100%; border-radius: var(--radius-sm); height: 38px; font-weight: 600;">⚡ Execute JSON-RPC Tool Call</button>
+              </div>
+
+              <div style="margin-top: 14px;">
+                <label style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Server JSON-RPC Response Output:</label>
+                <pre id="pg-response-output" style="background: #090d16; color: #34d399; font-family: var(--font-mono); font-size: 11px; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); max-height: 220px; overflow: auto; margin-top: 6px;">Select a tool and click Execute to see JSON-RPC response.</pre>
+              </div>
             </div>
+
+            <!-- SECTION 3: MCP RESOURCES -->
+            <div id="mcp-sec-resources" class="mcp-subpanel" style="display: none;">
+              <h3 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 8px;">Exposed MCP Resources</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Read context resources or subscribe to live notification updates (`resources/subscribe`).</p>
+              <div id="mcp-resources-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- SECTION 4: MCP PROMPTS -->
+            <div id="mcp-sec-prompts" class="mcp-subpanel" style="display: none;">
+              <h3 style="font-family: var(--font-heading); font-size: 16px; margin-bottom: 8px;">MCP Prompts Library</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Pre-built prompt templates exposed by the MCP server (`prompts/get`).</p>
+              <div id="mcp-prompts-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
           </div>
 
           <!-- Right Panel: Live Terminal Protocol Log -->
@@ -164,18 +233,77 @@
       <!-- VIEW 3: RAG VECTOR SEARCH WORKBENCH -->
       <section id="tab-rag" class="view-panel">
         <div class="rag-layout">
+          
           <div class="rag-search-box">
-            <h2 style="font-family: var(--font-heading); font-size: 20px;">RAG Knowledge Base Search Tester</h2>
-            <p style="font-size: 13px; color: var(--text-muted);">Test the hybrid BM25 + Cosine similarity vector search engine directly against the indexed document passages.</p>
+            <h2 style="font-family: var(--font-heading); font-size: 20px;">RAG Hybrid Reranking Search Workbench</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">Test Reciprocal Rank Fusion (RRF) search across 20 indexed articles and 74 semantic chunks with HyDE query expansion.</p>
 
-            <div class="rag-input-group">
-              <input type="text" id="rag-query-input" class="chat-input" placeholder="e.g., 30-day return policy restocking fee, or Bluetooth pairing steps" value="return policy 30 days refund">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
+              <!-- Query Mode Selector -->
+              <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px;">
+                <label style="font-size: 11px; color: var(--text-accent);">Retrieval Mode:</label>
+                <select id="rag-mode-select" style="background: var(--bg-surface-elevated); color: #fff; border: 1px solid var(--border-glass); padding: 8px; border-radius: var(--radius-sm); font-size: 12px; outline: none;">
+                  <option value="HYBRID_RRF">Hybrid RRF (BM25 + Cosine)</option>
+                  <option value="VECTOR_COSINE">Vector Cosine Similarity Only</option>
+                  <option value="BM25_LEXICAL">BM25 Lexical Overlap Only</option>
+                </select>
+              </div>
+
+              <!-- Category Filter -->
+              <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px;">
+                <label style="font-size: 11px; color: var(--text-accent);">Category Facet Filter:</label>
+                <select id="rag-category-select" style="background: var(--bg-surface-elevated); color: #fff; border: 1px solid var(--border-glass); padding: 8px; border-radius: var(--radius-sm); font-size: 12px; outline: none;">
+                  <option value="ALL">All Categories (20 Docs)</option>
+                  <option value="Shipping">Shipping & Logistics</option>
+                  <option value="Returns">Returns & Refunds</option>
+                  <option value="Warranty">Hardware & Warranty</option>
+                  <option value="Security">Security & Compliance</option>
+                  <option value="Technical">Technical & IoT</option>
+                  <option value="Billing">Billing & Enterprise SLAs</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="rag-input-group" style="margin-top: 12px;">
+              <input type="text" id="rag-query-input" class="chat-input" placeholder="e.g., 30-day return policy restocking fee, firmware recovery, or GDPR data export" value="return policy 30 days refund">
               <button id="rag-search-btn" class="send-btn" style="width: auto; padding: 0 24px;">Search RAG</button>
+            </div>
+
+            <!-- HyDE Expanded Terms Display -->
+            <div id="rag-expanded-terms" style="margin-top: 10px; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Real-Time RAG Evaluation Metrics Scorecard -->
+          <div class="rag-metrics-card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 14px; background: rgba(31, 41, 61, 0.6); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+            <div style="text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Precision@K</div>
+              <div id="metric-p-k" style="font-size: 18px; font-weight: 700; color: #38bdf8;">100%</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Recall@K</div>
+              <div id="metric-r-k" style="font-size: 18px; font-weight: 700; color: #34d399;">66.7%</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">MRR Score</div>
+              <div id="metric-mrr" style="font-size: 18px; font-weight: 700; color: #fbbf24;">1.00</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Top Match RRF</div>
+              <div id="metric-top-rrf" style="font-size: 18px; font-weight: 700; color: #a5b4fc;">0.0328</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Context Relevance</div>
+              <div id="metric-relevance" style="font-size: 18px; font-weight: 700; color: #67e8f9;">96.5%</div>
             </div>
           </div>
 
           <!-- Search Results Grid -->
-          <div style="font-family: var(--font-heading); font-size: 16px; margin-top: 10px;">Top Matched Passages</div>
+          <div style="font-family: var(--font-heading); font-size: 16px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+            <span>Top Matched Passages</span>
+            <span id="rag-results-count" style="font-size: 12px; color: var(--text-muted);">Showing 3 matches</span>
+          </div>
           <div class="rag-results-grid" id="rag-results-container">
             <!-- Dynamic passage cards injected here -->
           </div>
@@ -188,33 +316,38 @@
         <!-- Metrics Bar -->
         <div class="dashboard-metrics">
           <div class="metric-card">
-            <div class="metric-icon">💬</div>
+            <div class="metric-icon">📚</div>
             <div>
-              <div class="metric-val" id="metric-queries">14</div>
-              <div class="metric-label">Support Inquiries</div>
+              <div class="metric-val" id="metric-kb-count">20</div>
+              <div class="metric-label">Indexed KB Articles</div>
             </div>
           </div>
           <div class="metric-card">
             <div class="metric-icon">⚡</div>
             <div>
-              <div class="metric-val" id="metric-mcp-calls">8</div>
-              <div class="metric-label">MCP Tool Executions</div>
+              <div class="metric-val" id="metric-mcp-calls">12</div>
+              <div class="metric-label">Registered MCP Tools</div>
             </div>
           </div>
           <div class="metric-card">
-            <div class="metric-icon">🎯</div>
+            <div class="metric-icon">📦</div>
             <div>
-              <div class="metric-val">98.4%</div>
-              <div class="metric-label">RAG Accuracy Score</div>
+              <div class="metric-val" id="metric-orders-count">12</div>
+              <div class="metric-label">Customer Orders</div>
             </div>
           </div>
           <div class="metric-card">
             <div class="metric-icon">🎫</div>
             <div>
-              <div class="metric-val" id="metric-tickets">2</div>
+              <div class="metric-val" id="metric-tickets">10</div>
               <div class="metric-label">Active Support Tickets</div>
             </div>
           </div>
+        </div>
+
+        <!-- Table Search Bar -->
+        <div style="margin-bottom: 16px; display: flex; gap: 12px;">
+          <input type="text" id="dash-search-input" class="chat-input" placeholder="Search orders, customers, tracking numbers, or tickets..." style="max-width: 400px;">
         </div>
 
         <!-- Orders Table -->

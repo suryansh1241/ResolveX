@@ -8,6 +8,9 @@ class MCPClient {
     this.server = mcpServer;
     this.requestIdCounter = 1;
     this.availableTools = [];
+    this.availableResources = [];
+    this.availablePrompts = [];
+    this.subscriptions = new Set();
     this.isConnected = false;
     this.logs = [];
     this.onLogUpdate = null;
@@ -23,15 +26,17 @@ class MCPClient {
       method: "initialize",
       params: {
         protocolVersion: "2024-11-05",
-        clientInfo: { name: "ResolveX-WebClient", version: "1.0.0" }
+        clientInfo: { name: "ResolveX-WebClient", version: "2.0.0" }
       }
     };
 
     const initRes = await this.server.handleRequest(initRequest);
     this.isConnected = !initRes.error;
 
-    // Fetch tool directory
+    // Discover tools, resources, and prompts
     await this.refreshTools();
+    await this.refreshResources();
+    await this.refreshPrompts();
     return this.isConnected;
   }
 
@@ -50,6 +55,40 @@ class MCPClient {
       this.availableTools = response.result.tools;
     }
     return this.availableTools;
+  }
+
+  /**
+   * Discovers available resources (`resources/list`)
+   */
+  async refreshResources() {
+    const request = {
+      jsonrpc: "2.0",
+      id: this.requestIdCounter++,
+      method: "resources/list"
+    };
+
+    const response = await this.server.handleRequest(request);
+    if (response.result && response.result.resources) {
+      this.availableResources = response.result.resources;
+    }
+    return this.availableResources;
+  }
+
+  /**
+   * Discovers available prompts (`prompts/list`)
+   */
+  async refreshPrompts() {
+    const request = {
+      jsonrpc: "2.0",
+      id: this.requestIdCounter++,
+      method: "prompts/list"
+    };
+
+    const response = await this.server.handleRequest(request);
+    if (response.result && response.result.prompts) {
+      this.availablePrompts = response.result.prompts;
+    }
+    return this.availablePrompts;
   }
 
   /**
@@ -95,6 +134,34 @@ class MCPClient {
       id: this.requestIdCounter++,
       method: "resources/read",
       params: { uri }
+    };
+    return await this.server.handleRequest(request);
+  }
+
+  /**
+   * Subscribes to a resource (`resources/subscribe`)
+   */
+  async subscribeResource(uri) {
+    const request = {
+      jsonrpc: "2.0",
+      id: this.requestIdCounter++,
+      method: "resources/subscribe",
+      params: { uri }
+    };
+    const res = await this.server.handleRequest(request);
+    if (res.result && res.result.subscribed) this.subscriptions.add(uri);
+    return res;
+  }
+
+  /**
+   * Gets a prompt template (`prompts/get`)
+   */
+  async getPrompt(name, args = {}) {
+    const request = {
+      jsonrpc: "2.0",
+      id: this.requestIdCounter++,
+      method: "prompts/get",
+      params: { name, arguments: args }
     };
     return await this.server.handleRequest(request);
   }
